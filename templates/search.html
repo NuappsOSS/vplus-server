@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row">
+  <div class='col-md-12'>
+    <h5><a href="{{ url_for('index')}}">Go back</a></h5>
+  </div>
+  <div class="col-md-6">
+    <h2>Company Search Results</h2>
+    <hr />
+    {% if searchCompany %}
+      {% for business in searchCompany %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          {% if searchCompany[0]["imgUrl"] %}
+            <img src="{{ searchCompany[0]['imgUrl' ]}}" class="img-circle" width="50px" />
+          {% endif %}
+          <h3><a href="{{ url_for('company', company_name=searchCompany[0]['companyName'] )}}">
+          <b>{{ searchCompany[0]['companyName'] }}</b></a></h3>
+          <h4>{{ searchCompany[0]['location'] }}</h4>
+          <hr />
+          <h4><b>Description: {{ searchCompany[0]['description'] }}</b></h4>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <h3> No results found. Try again? </h3>
+    {% endif %}
+  </div>
+  <div class="col-md-6">
+    <h2>Employee Search Results</h2>
+    <hr />
+    {% if searchEmployee %}
+      {% for employee in searchEmployee %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h3><a href="{{ url_for('profile', employee_name=searchEmployee[0]['employeeName'] )}}">
+          <b>{{ searchEmployee[0]['employeeName'] }}</b></a></h3>
+          <h4>{{ searchEmployee[0]['company'] }}</h4>
+          <hr />
+          <h4><b>Description: {{ searchEmployee[0]['position'] }}</b></h4>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <h3> No results found. Try again? </h3>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

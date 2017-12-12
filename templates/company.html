@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row top">
+  <header class="bg-primary text-white" style="
+    padding: 154px 0 100px;
+    background-image: url('https://source.unsplash.com/1600x900/?{{ company[0]['location'] }}');
+    background-size: cover;
+    opacity: rgba(0, 0, 0, 0.7);
+  ">
+     <div class="container text-center">
+       <img class="img-circle" src="{{ company[0]['imgUrl'] }}" width="100px"/>
+       <h1 class="big">{{ company[0]["companyName"] }}</h1>
+       <p class="lead">{{ company[0]["location"] }}</p>
+       <a href="{{ company[0]["website"] }}">
+         <i class="fa fa-address-card fa-2x"></i>
+       </a>
+       <a href="https://twitter.com/{{ company[0]['twitter'] }}">
+         <i class="fa fa-twitter fa-2x"></i>
+       </a>
+       <a href="https://twitter.com/{{ company[0]['facebook'] }}">
+         <i class="fa fa-facebook fa-2x"></i>
+       </a>
+     </div>
+   </header>
+    <div class="col-md-offset-2 col-md-10 company-body">
+      <h5><a href="{{ url_for('index')}}">Go back</a></h5>
+      <hr>
+      <h4><b>Industry:</b>
+        {{ company[0]["industry"] }}
+      </h4>
+      <h4><b>Description:</b>
+        {{ company[0]["description"] }}
+      </h4>
+      <hr>
+      <h4><b>Website</b> {{ company[0]["website"] }}</h4>
+
+    </div>
+</div>
+{% endblock %}

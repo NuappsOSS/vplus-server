@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<div class="row">
+  <div class ="col-md-12 text-center" style="topDiv">
+    <h3>Administration Panel</h3>
+    <hr>
+    <p> Welcome to the VE+ Administration panel! From here, you may add companies and employees for that company. </p>
+    <br>
+  </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">Add Company</div>
+      <div class="panel-body">
+          {{ wtf.quick_form(companyForm, action="/admin", method="POST") }}
+          {{ companyForm.csrf_token }}
+          <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">Add Employee</div>
+      <div class="panel-body">
+        {{ employeeForm.csrf_token }}
+        {{ wtf.quick_form(employeeForm, action="/admin", method="POST") }}
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

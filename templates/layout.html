@@ -1,0 +1,47 @@
+{% extends 'bootstrap/base.html' %}
+{% block html_attribs %} lang="en"{% endblock %}
+{% block metas %}
+  {{ super() }}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+{% endblock%}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#footer-body">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse" id="footer-body">
+            <ul class="nav navbar-nav">
+              <li><a href="{{ url_for('index') }}">Home</a></li>
+              <li><a href="{{ url_for('about') }}">About Us</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Terms &amp; Conditions</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+      </div>
+    </div>
+{% endblock %}
