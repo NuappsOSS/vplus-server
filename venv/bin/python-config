@@ -1,4 +1,4 @@
-#!/Users/ve/Desktop/Nuapps/Code/python-app/venv/bin/python
+#!/Users/ve/Desktop/Nuapps/Code/python-app/server/venv/bin/python
 
 import sys
 import getopt

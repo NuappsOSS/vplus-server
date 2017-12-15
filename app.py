@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_wtf import FlaskForm
+from flask_login import LoginManager, login_user
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired #... and other necessary validators
 from flask_bootstrap import Bootstrap
@@ -16,13 +17,16 @@ default_app = firebase_admin.initialize_app(cred, {
 
 
 app = Flask(__name__)
-app.config.from_object('config')
 
 app.secret_key = os.urandom(100)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 Bootstrap(app)
-app.secret_key = os.urandom(64)
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
 
 class CompanyForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -43,6 +47,29 @@ class EmployeeForm(FlaskForm):
     twitter = StringField('Twitter')
     email = StringField('Email')
     website = StringField('Website')
+
+def searchForCompany(company_query):
+    search = []
+    companies = db.reference('companies/').get(etag=False)
+
+    for business in companies.items():
+        for key,value in business[1].items():
+            if value == company_query:
+                search.append(business[1])
+    return search
+
+
+# Combine into funtion that returns tuple
+def searchForEmployee(employee_query):
+    search = []
+    employees = db.reference('employees/').get(etag=False)
+
+    for employee in employees.items():
+        for key, value in employee[1].items():
+            if value == employee_query:
+                search.append(employee[1])
+
+    return search
 
 
 # Database helpers
@@ -85,11 +112,36 @@ class DatabaseHelper(object):
             'website'       : '{}'.format(self.query['website'])
         })
 
+@login_manager.user_loader
+def load_user(input_key):
+    keys = db.reference('invite-keys/').get(etag=False)
+    for key in keys:
+        if key == input_key:
+            return key
+
+    return None
+
+
 
 # Redirect to 404
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+
+@app.route('/invite', methods=['GET', 'POST'])
+def invite():
+    if request.method == "POST":
+
+        login_user(request.form['key'])
+        flash("Logged in successfully")
+        return redirect(url_for('index'))
+
+    return render_template('invite.html')
+
+@app.route('/index')
+def redirect_to_index():
+    return redirect(url_for('index'))
 
 # Main Page
 @app.route('/', methods=['GET', 'POST'])
@@ -135,29 +187,6 @@ def about():
     return render_template('about.html', title="About VEPlus")
 
 
-def searchForCompany(company_query):
-    search = []
-    companies = db.reference('companies/').get(etag=False)
-
-    for business in companies.items():
-        for key,value in business[1].items():
-            if value == company_query:
-                search.append(business[1])
-    return search
-
-
-# Combine into funtion that returns tuple
-def searchForEmployee(employee_query):
-    search = []
-    employees = db.reference('employees/').get(etag=False)
-
-    for employee in employees.items():
-        for key, value in employee[1].items():
-            if value == employee_query:
-                search.append(employee[1])
-
-    return search
-
 # Search route for companies
 @app.route('/search/?q=<query>', methods=['GET', 'POST'])
 def search(query):
@@ -177,6 +206,9 @@ def search(query):
 def profile(employee_name):
     search = searchForEmployee(employee_name)
 
+    if search is None:
+        flask.abort(404)
+
     return render_template('profile.html',
                 title=employee_name,
                 employee=search)
@@ -186,6 +218,8 @@ def profile(employee_name):
 def company(company_name):
     search = searchForCompany(company_name)
 
+    if search is None:
+        flask.abort(404)
 
     return render_template('company.html',
                 title=company_name,
@@ -194,18 +228,20 @@ def company(company_name):
 # "unit test"
 def test():
     emp = {
-        'name'  : "Derek Pastor",
-        'company'       : "Nuapps",
-        'position'      : "CTO",
-        'description'   : "I'm a horrible CTO",
-        'twitter'       : "poop",
-        'email'         : "derek@derek.com",
-        'website'       : "derekpastor.com"
+        'name' : 'Your Company Here',
+        'imgUrl': '',
+        'employees' : '22',
+        'industry' : 'Business',
+        'location' : 'San Francisco',
+        'website': 'https://yourwebsite.com',
+        'twitter': '@test',
+        'facebook': '@test',
+        'description' : 'Your Company Description Here!',
     }
 
     obj = DatabaseHelper(emp)
-    obj.addNewEmployee()
+    obj.addNewCompany()
 
 if __name__ == '__main__':
-    #test()
+    test()
     app.run()

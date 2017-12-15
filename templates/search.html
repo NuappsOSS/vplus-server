@@ -11,14 +11,14 @@
       {% for business in searchCompany %}
       <div class="panel panel-default">
         <div class="panel-body">
-          {% if searchCompany[0]["imgUrl"] %}
-            <img src="{{ searchCompany[0]['imgUrl' ]}}" class="img-circle" width="50px" />
+          {% if business["imgUrl"] %}
+            <img src="{{ business['imgUrl' ]}}" class="img-circle" width="50px" />
           {% endif %}
-          <h3><a href="{{ url_for('company', company_name=searchCompany[0]['companyName'] )}}">
-          <b>{{ searchCompany[0]['companyName'] }}</b></a></h3>
-          <h4>{{ searchCompany[0]['location'] }}</h4>
+          <h3><a href="{{ url_for('company', company_name=business['companyName'] )}}">
+          <b>{{ business['companyName'] }}</b></a></h3>
+          <h4>{{ business['location'] }}</h4>
           <hr />
-          <h4><b>Description: {{ searchCompany[0]['description'] }}</b></h4>
+          <h4><b>Description: {{ business['description'] }}</b></h4>
         </div>
       </div>
       {% endfor %}
@@ -33,11 +33,11 @@
       {% for employee in searchEmployee %}
       <div class="panel panel-default">
         <div class="panel-body">
-          <h3><a href="{{ url_for('profile', employee_name=searchEmployee[0]['employeeName'] )}}">
-          <b>{{ searchEmployee[0]['employeeName'] }}</b></a></h3>
-          <h4>{{ searchEmployee[0]['company'] }}</h4>
+          <h3><a href="{{ url_for('profile', employee_name=employee['employeeName'] )}}">
+          <b>{{ employee['employeeName'] }}</b></a></h3>
+          <h4>{{ employee['company'] }}</h4>
           <hr />
-          <h4><b>Description: {{ searchEmployee[0]['position'] }}</b></h4>
+          <h4><b>Description: {{ employee['position'] }}</b></h4>
         </div>
       </div>
       {% endfor %}

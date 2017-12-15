@@ -8,7 +8,9 @@
     opacity: rgba(0, 0, 0, 0.7);
   ">
      <div class="container text-center">
-       <img class="img-circle" src="{{ company[0]['imgUrl'] }}" width="100px"/>
+       {% if company[0]['imgUrl'] %}
+        <img class="img-circle" src="{{ company[0]['imgUrl'] }}" width="100px"/>
+       {% endif %}
        <h1 class="big">{{ company[0]["companyName"] }}</h1>
        <p class="lead">{{ company[0]["location"] }}</p>
        <a href="{{ company[0]["website"] }}">
@@ -25,14 +27,12 @@
     <div class="col-md-offset-2 col-md-10 company-body">
       <h5><a href="{{ url_for('index')}}">Go back</a></h5>
       <hr>
-      <h4><b>Industry:</b>
-        {{ company[0]["industry"] }}
-      </h4>
-      <h4><b>Description:</b>
-        {{ company[0]["description"] }}
-      </h4>
+      <p><b>Industry:</b> {{ company[0]["industry"] }}
+      </p>
+      <p><b>Description:</b> {{ company[0]["description"] }}
+      </p>
       <hr>
-      <h4><b>Website</b> {{ company[0]["website"] }}</h4>
+      <h4><b>Website</b> <a href="{{ company[0]["website"] }}">{{ company[0]["website"] }}</a></h4>
 
     </div>
 </div>
