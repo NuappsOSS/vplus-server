@@ -186,6 +186,12 @@ def admin():
 def about():
     return render_template('about.html', title="About VEPlus")
 
+# About Page
+@app.route('/privacypolicy')
+def privacypolicy():
+    return render_template('privacypolicy.html', title="Privacy Policy")
+
+
 
 # Search route for companies
 @app.route('/search/?q=<query>', methods=['GET', 'POST'])
