@@ -1,4 +1,4 @@
-    #!/usr/bin/python
+#!/usr/bin/python
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_wtf import FlaskForm
 from flask_login import LoginManager, login_user
