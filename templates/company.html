@@ -45,7 +45,9 @@
 
       <hr>
         <h4>Interested? Scan this company's QR code!</h4>
-        <img src="{{ qrcode('http://vplus-server.herokuapp.com/company/{{ company[0]["name"] }}') }}">
+        {% set url = ["http://vplus-server.herokuapp.com/company/", company[0]["name"] ] %}
+        <img src="{{ qrcode(url | join ) }}">
+        <p>{{ url | join}}</p>
         <br><br>
     </div>
 

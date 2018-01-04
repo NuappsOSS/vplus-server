@@ -172,6 +172,11 @@ def invite():
 def redirect_to_index():
     return redirect(url_for('index'))
 
+@app.route('/privacypolicy')
+def privacy_policy():
+    return render_template('privacypolicy.html',
+                        title="Privay Policy")
+
 # Main Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
