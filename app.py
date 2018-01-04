@@ -1,12 +1,16 @@
-#!/usr/bin/python
+    #!/usr/bin/python
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_wtf import FlaskForm
 from flask_login import LoginManager, login_user
+from flask_googlemaps import GoogleMaps
+from flask_qrcode import QRcode
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired #... and other necessary validators
 from flask_bootstrap import Bootstrap
 
 import os
+import urllib
+import simplejson
 import firebase_admin
 from firebase_admin import credentials, db
 
@@ -20,7 +24,11 @@ app = Flask(__name__)
 
 app.secret_key = os.urandom(100)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['GOOGLEMAPS_KEY'] = "AIzaSyBddL64NmxF6-8GVRl4gUvJDCXFf0KmB0w"
 
+
+GoogleMaps(app)
+QRcode(app)
 Bootstrap(app)
 login_manager = LoginManager()
 
@@ -71,6 +79,26 @@ def searchForEmployee(employee_query):
 
     return search
 
+googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
+
+def get_coordinates(query):
+    query = str(query).encode('utf-8')
+    params = {
+        'address': query,
+        'sensor': "false"
+    }
+    url = googleGeocodeUrl + urllib.urlencode(params)
+    json_response = urllib.urlopen(url)
+    response = simplejson.loads(json_response.read())
+    if response['results']:
+        location = response['results'][0]['geometry']['location']
+        latitude, longitude = location['lat'], location['lng']
+        print query, latitude, longitude
+    else:
+        latitude, longitude = None, None
+        print query, "<no results>"
+    return latitude, longitude
+
 
 # Database helpers
 
@@ -86,8 +114,8 @@ class DatabaseHelper(object):
         self.employee = self.root.child('employees')
 
 
-    # TODO: Address + Social Media + Website
     def addNewCompany(self):
+
         self.company.push({
             'companyName' : '{}'.format(self.query['name']),
             'employees' : '{}'.format(self.query['employees']),
@@ -97,7 +125,8 @@ class DatabaseHelper(object):
             'website': '{}'.format(self.query['website']),
             'twitter': '{}'.format(self.query['twitter']),
             'facebook': '{}'.format(self.query['facebook']),
-            'description' : '{}'.format(self.query['description'])
+            'description' : '{}'.format(self.query['description']),
+            'address': '{}'.format(self.query['address'])
         })
 
 
@@ -186,12 +215,6 @@ def admin():
 def about():
     return render_template('about.html', title="About VEPlus")
 
-# About Page
-@app.route('/privacypolicy')
-def privacypolicy():
-    return render_template('privacypolicy.html', title="Privacy Policy")
-
-
 
 # Search route for companies
 @app.route('/search/?q=<query>', methods=['GET', 'POST'])
@@ -231,23 +254,9 @@ def company(company_name):
                 title=company_name,
                 company=search)
 
-# "unit test"
-def test():
-    emp = {
-        'name' : 'Your Company Here',
-        'imgUrl': '',
-        'employees' : '22',
-        'industry' : 'Business',
-        'location' : 'San Francisco',
-        'website': 'https://yourwebsite.com',
-        'twitter': '@test',
-        'facebook': '@test',
-        'description' : 'Your Company Description Here!',
-    }
 
-    obj = DatabaseHelper(emp)
-    obj.addNewCompany()
+app.jinja_env.filters['get_coordinates'] = get_coordinates
+
 
 if __name__ == '__main__':
-    test()
     app.run()

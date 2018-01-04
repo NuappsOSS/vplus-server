@@ -1,6 +1,12 @@
-# VEPlus 
+# VEPlus
 
 This is the Python backend for VEPlus
+
+## Installation
+
+Fix problem with `six` on macOS
+
+    ➜ sudo pip install -r requirements.txt --ignore-installed six
 
 ## TODO
 
