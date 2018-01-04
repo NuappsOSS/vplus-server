@@ -24,7 +24,7 @@
        </a>
      </div>
    </header>
-    <div class="col-md-offset-2 col-md-10 company-body">
+    <div class="col-md-offset-2 col-md-5 company-body">
       <h5><a href="{{ url_for('index')}}">Go back</a></h5>
       <hr>
       <h4><b>Industry:</b> {{ company[0]["industry"] }}
@@ -32,8 +32,9 @@
       <h4><b>Description:</b> {{ company[0]["description"] }}
       </h4>
       <h4><b>Website</b> <a href="{{ company[0]["website"] }}">{{ company[0]["website"] }}</a></h4>
-      <hr>
-      <br>
+    </div>
+    <div class="col-md-5">
+      <br><br><br><br>
       <h4><b>Office:</b> {{ company[0]["address"] }}</h4>
       {% set latitude, longitude =  company[0]["address"] | get_coordinates  %}
       {% with map=googlemap_obj("another-map", latitude, longitude, markers=[(latitude, longitude)]) %}
@@ -42,15 +43,11 @@
       {% endwith %}
 
       {{ googlemap("company_map", latitude , longitude, market )}}
-
-      <hr>
-        <h4>Interested? Scan this company's QR code!</h4>
-        {% set url = ["http://vplus-server.herokuapp.com/company/", company[0]["name"] ] %}
-        <img src="{{ qrcode(url | join ) }}">
-        <p>{{ url | join}}</p>
-        <br><br>
     </div>
-
-
+    <div class="col-md-12 text-center">
+      <h4>Interested? Scan this company's QR code!</h4>
+      <img class="img-responsive" src="{{ qrcode(url) }}">
+      <br><br>
+    </div>
 </div>
 {% endblock %}

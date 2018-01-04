@@ -255,8 +255,11 @@ def company(company_name):
     if search is None:
         flask.abort(404)
 
+    url = "http://vplus-server.herokuapp.com/company/" + company_name
+
     return render_template('company.html',
                 title=company_name,
+                url=url,
                 company=search)
 
 
