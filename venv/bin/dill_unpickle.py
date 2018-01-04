@@ -1,4 +1,4 @@
-#!/Users/ve/Desktop/Nuapps/Code/python-app/server/venv/bin/python
+#!/home/ex0dus/Code/vplus-server-test/venv/bin/python2
 #
 # Author: Mike McKerns (mmckerns @caltech and @uqfoundation)
 # Copyright (c) 2008-2016 California Institute of Technology.

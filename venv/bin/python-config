@@ -1,4 +1,4 @@
-#!/Users/ve/Desktop/Nuapps/Code/python-app/server/venv/bin/python
+#!/home/ex0dus/Code/vplus-server-test/venv/bin/python
 
 import sys
 import getopt
