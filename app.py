@@ -37,7 +37,7 @@ login_manager.login_view = "login"
 
 
 class CompanyForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    companyName = StringField('Name', validators=[DataRequired()])
     employees = StringField('Employees', validators=[DataRequired()])
     industry = StringField('Industry', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
@@ -46,15 +46,16 @@ class CompanyForm(FlaskForm):
     facebook = StringField('Facebook (link)')
     website = StringField('Website (url)')
     description = TextAreaField('Description')
+    address = TextAreaField('Address')
 
 class EmployeeForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    company = StringField('Company', validators=[DataRequired()])
-    position = StringField('Job Position', validators=[DataRequired()])
-    description = TextAreaField('Job Description', validators=[DataRequired()])
-    twitter = StringField('Twitter')
-    email = StringField('Email')
-    website = StringField('Website')
+    employeeName = StringField('Name', validators=[DataRequired()])
+    employeeCompany = StringField('Company', validators=[DataRequired()])
+    employeePosition = StringField('Job Position', validators=[DataRequired()])
+    employeeDescription = TextAreaField('Job Description', validators=[DataRequired()])
+    employeeTwitter = StringField('Twitter')
+    employeeEmail = StringField('Email')
+    employeeWebsite = StringField('Website')
 
 def searchForCompany(company_query):
     search = []
@@ -110,14 +111,14 @@ class DatabaseHelper(object):
         # Instance variables for calling upon reference
         # to database
         self.root = db.reference()
-        self.company = self.root.child('companies')
-        self.employee = self.root.child('employees')
 
 
     def addNewCompany(self):
 
+        self.company = self.root.child('companies')
+
         self.company.push({
-            'companyName' : '{}'.format(self.query['name']),
+            'companyName' : '{}'.format(self.query['companyName']),
             'employees' : '{}'.format(self.query['employees']),
             'industry' : '{}'.format(self.query['industry']),
             'location' : '{}'.format(self.query['location']),
@@ -131,14 +132,17 @@ class DatabaseHelper(object):
 
 
     def addNewEmployee(self):
+
+        self.employee = self.root.child('employees')
+
         self.employee.push({
-            'employeeName'  : '{}'.format(self.query['name']),
-            'company'       : '{}'.format(self.query['company']),
-            'position'      : '{}'.format(self.query['position']),
-            'description'   : '{}'.format(self.query['description']),
-            'twitter'       : '{}'.format(self.query['twitter']),
-            'email'         : '{}'.format(self.query['email']),
-            'website'       : '{}'.format(self.query['website'])
+            'employeeName'          : '{}'.format(self.query['employeeName']),
+            'employeeCompany'       : '{}'.format(self.query['employeeCompany']),
+            'employeePosition'      : '{}'.format(self.query['employeePosition']),
+            'employeeDescription'   : '{}'.format(self.query['employeeDescription']),
+            'employeeTwitter'       : '{}'.format(self.query['employeeTwitter']),
+            'employeeEmail'         : '{}'.format(self.query['employeeEmail']),
+            'employeeWebsite'       : '{}'.format(self.query['employeeWebsite'])
         })
 
 @login_manager.user_loader
@@ -149,8 +153,6 @@ def load_user(input_key):
             return key
 
     return None
-
-
 
 # Redirect to 404
 @app.errorhandler(404)
@@ -180,33 +182,37 @@ def privacy_policy():
 # Main Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
+
+    featured = "Matchwear"
+
+    featuredCompany = searchForCompany(featured)
+
     if request.method == "POST":
         return redirect(url_for("search", query=request.form["searchQuery"]))
 
     return render_template('index.html',
-                        title="Welcome!")
+                        title="Welcome!",
+                        featuredCompany=featuredCompany)
 
 # Admin Page
 @app.route('/admin', methods = ['GET', 'POST'])
 def admin():
 
     # Forms to render on Admin page
-    companyForm = CompanyForm(request.form)
-    employeeForm = EmployeeForm(request.form)
+    companyForm = CompanyForm()
+    employeeForm = EmployeeForm()
 
     # Check if method is POST (form action occurred)
     if request.method == "POST":
-        # Create new object to DatabaseHelper
+
         obj = DatabaseHelper(request.form)
-        # Check if company data or employee data
+
         if request.form["companyName"]:
             obj.addNewCompany()
-            flash("success", "Successfully added new company")
+            flash("Successfully added new company")
         elif request.form["employeeName"]:
             obj.addNewEmployee()
-            flash("success", "Successfully added new employee!")
-        # Return to admin page
-        return redirect(url_for('admin'))
+            flash("Successfully added new employee")
 
     # Render template with necessary data
     return render_template('admin.html',

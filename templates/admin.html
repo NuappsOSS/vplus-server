@@ -26,9 +26,20 @@
     <div class="panel panel-default">
       <div class="panel-heading">Add Company</div>
       <div class="panel-body">
-          {{ wtf.quick_form(companyForm, action="/admin", method="POST") }}
-          {{ companyForm.csrf_token }}
-          <button type="submit" class="btn btn-default">Submit</button>
+          <form method="POST">
+              {{ companyForm.csrf_token }}
+              {{ wtf.form_field(companyForm.companyName )}}
+              {{ wtf.form_field(companyForm.address )}}
+              {{ wtf.form_field(companyForm.employees )}}
+              {{ wtf.form_field(companyForm.industry )}}
+              {{ wtf.form_field(companyForm.location )}}
+              {{ wtf.form_field(companyForm.imgUrl )}}
+              {{ wtf.form_field(companyForm.twitter )}}
+              {{ wtf.form_field(companyForm.facebook )}}
+              {{ wtf.form_field(companyForm.website )}}
+              {{ wtf.form_field(companyForm.description )}}
+              <button type="submit" class="btn btn-default">Submit</button>
+          </form>
       </div>
     </div>
   </div>
@@ -36,9 +47,17 @@
     <div class="panel panel-default">
       <div class="panel-heading">Add Employee</div>
       <div class="panel-body">
-        {{ employeeForm.csrf_token }}
-        {{ wtf.quick_form(employeeForm, action="/admin", method="POST") }}
-        <button type="submit" class="btn btn-default">Submit</button>
+        <form method="POST">
+          {{ employeeForm.csrf_token }}
+          {{ wtf.form_field(employeeForm.employeeName )}}
+          {{ wtf.form_field(employeeForm.employeeCompany )}}
+          {{ wtf.form_field(employeeForm.employeePosition )}}
+          {{ wtf.form_field(employeeForm.employeeDescription )}}
+          {{ wtf.form_field(employeeForm.employeeTwitter )}}
+          {{ wtf.form_field(employeeForm.employeeEmail )}}
+          {{ wtf.form_field(employeeForm.employeeWebsite )}}
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
       </div>
     </div>
   </div>
