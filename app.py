@@ -1,7 +1,6 @@
 #!/usr/bin/python
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_wtf import FlaskForm
-from flask_login import LoginManager, login_user
 from flask_googlemaps import GoogleMaps
 from flask_qrcode import QRcode
 from wtforms import StringField, TextAreaField
@@ -30,41 +29,16 @@ app.config['GOOGLEMAPS_KEY'] = "AIzaSyBddL64NmxF6-8GVRl4gUvJDCXFf0KmB0w"
 GoogleMaps(app)
 QRcode(app)
 Bootstrap(app)
-login_manager = LoginManager()
 
-login_manager.init_app(app)
-login_manager.login_view = "login"
-
-
-class CompanyForm(FlaskForm):
-    companyName = StringField('Name', validators=[DataRequired()])
-    employees = StringField('Employees', validators=[DataRequired()])
-    industry = StringField('Industry', validators=[DataRequired()])
-    location = StringField('Location', validators=[DataRequired()])
-    imgUrl = StringField('Image URL')
-    twitter = StringField('Twitter (@handle)')
-    facebook = StringField('Facebook (link)')
-    website = StringField('Website (url)')
-    description = TextAreaField('Description')
-    address = TextAreaField('Address')
-
-class EmployeeForm(FlaskForm):
-    employeeName = StringField('Name', validators=[DataRequired()])
-    employeeCompany = StringField('Company', validators=[DataRequired()])
-    employeePosition = StringField('Job Position', validators=[DataRequired()])
-    employeeDescription = TextAreaField('Job Description', validators=[DataRequired()])
-    employeeTwitter = StringField('Twitter')
-    employeeEmail = StringField('Email')
-    employeeWebsite = StringField('Website')
 
 def searchForCompany(company_query):
     search = []
     companies = db.reference('companies/').get(etag=False)
 
-    for business in companies.items():
-        for key,value in business[1].items():
-            if value == company_query:
-                search.append(business[1])
+    for business in companies:
+        if business[1] == company_query:
+            search.append(business)
+
     return search
 
 
@@ -73,10 +47,9 @@ def searchForEmployee(employee_query):
     search = []
     employees = db.reference('employees/').get(etag=False)
 
-    for employee in employees.items():
-        for key, value in employee[1].items():
-            if value == employee_query:
-                search.append(employee[1])
+    for employee in employees:
+        if employee[1] == employee_query:
+            search.append(employee)
 
     return search
 
@@ -100,75 +73,11 @@ def get_coordinates(query):
         print query, "<no results>"
     return latitude, longitude
 
-
-# Database helpers
-
-class DatabaseHelper(object):
-
-    def __init__(self, query):
-        self.query = query
-
-        # Instance variables for calling upon reference
-        # to database
-        self.root = db.reference()
-
-
-    def addNewCompany(self):
-
-        self.company = self.root.child('companies')
-
-        self.company.push({
-            'companyName' : '{}'.format(self.query['companyName']),
-            'employees' : '{}'.format(self.query['employees']),
-            'industry' : '{}'.format(self.query['industry']),
-            'location' : '{}'.format(self.query['location']),
-            'imgUrl' : '{}'.format(self.query['imgUrl']),
-            'website': '{}'.format(self.query['website']),
-            'twitter': '{}'.format(self.query['twitter']),
-            'facebook': '{}'.format(self.query['facebook']),
-            'description' : '{}'.format(self.query['description']),
-            'address': '{}'.format(self.query['address'])
-        })
-
-
-    def addNewEmployee(self):
-
-        self.employee = self.root.child('employees')
-
-        self.employee.push({
-            'employeeName'          : '{}'.format(self.query['employeeName']),
-            'employeeCompany'       : '{}'.format(self.query['employeeCompany']),
-            'employeePosition'      : '{}'.format(self.query['employeePosition']),
-            'employeeDescription'   : '{}'.format(self.query['employeeDescription']),
-            'employeeTwitter'       : '{}'.format(self.query['employeeTwitter']),
-            'employeeEmail'         : '{}'.format(self.query['employeeEmail']),
-            'employeeWebsite'       : '{}'.format(self.query['employeeWebsite'])
-        })
-
-@login_manager.user_loader
-def load_user(input_key):
-    keys = db.reference('invite-keys/').get(etag=False)
-    for key in keys:
-        if key == input_key:
-            return key
-
-    return None
-
 # Redirect to 404
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
-
-@app.route('/invite', methods=['GET', 'POST'])
-def invite():
-    if request.method == "POST":
-
-        login_user(request.form['key'])
-        flash("Logged in successfully")
-        return redirect(url_for('index'))
-
-    return render_template('invite.html')
 
 @app.route('/index')
 def redirect_to_index():
@@ -177,7 +86,7 @@ def redirect_to_index():
 @app.route('/privacypolicy')
 def privacy_policy():
     return render_template('privacypolicy.html',
-                        title="Privay Policy")
+                        title="Privacy Policy")
 
 # Main Page
 @app.route('/', methods=['GET', 'POST'])
@@ -193,33 +102,6 @@ def index():
     return render_template('index.html',
                         title="Welcome!",
                         featuredCompany=featuredCompany)
-
-# Admin Page
-@app.route('/admin', methods = ['GET', 'POST'])
-def admin():
-
-    # Forms to render on Admin page
-    companyForm = CompanyForm()
-    employeeForm = EmployeeForm()
-
-    # Check if method is POST (form action occurred)
-    if request.method == "POST":
-
-        obj = DatabaseHelper(request.form)
-
-        if request.form["companyName"]:
-            obj.addNewCompany()
-            flash("Successfully added new company")
-        elif request.form["employeeName"]:
-            obj.addNewEmployee()
-            flash("Successfully added new employee")
-
-    # Render template with necessary data
-    return render_template('admin.html',
-        title="Admin Panel",
-        companyForm=companyForm,
-        employeeForm=employeeForm)
-
 
 # About Page
 @app.route('/about')

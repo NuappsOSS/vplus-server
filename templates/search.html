@@ -4,46 +4,49 @@
   <div class='col-md-12'>
     <h5><a href="{{ url_for('index')}}">Go back</a></h5>
   </div>
-  <div class="col-md-6">
+
+  {% if searchCompany %}
+  <div class="col-md-12">
     <h2>Company Search Results</h2>
     <hr />
-    {% if searchCompany %}
       {% for business in searchCompany %}
       <div class="panel panel-default">
         <div class="panel-body">
-          {% if business["imgUrl"] %}
-            <img src="{{ business['imgUrl' ]}}" class="img-circle" width="50px" />
+          {% if business[6] %}
+            <img src="{{ business[6]}}" class="img-circle" width="50px" />
           {% endif %}
-          <h3><a href="{{ url_for('company', company_name=business['companyName'] )}}">
-          <b>{{ business['companyName'] }}</b></a></h3>
-          <h4>{{ business['location'] }}</h4>
+          <h3><a href="{{ url_for('company', company_name=business[1] )}}">
+          <b>{{ business[1] }}</b></a></h3>
+          <h4>{{ business[9] }}</h4>
           <hr />
-          <h4><b>Description: {{ business['description'] }}</b></h4>
+          <h4><b>Description:</b> {{ business[3] }}</h4>
         </div>
       </div>
       {% endfor %}
-    {% else %}
-      <h3> No results found. Try again? </h3>
-    {% endif %}
   </div>
-  <div class="col-md-6">
+
+  {% elif searchEmployee %}
+  <div class="col-md-12">
     <h2>Employee Search Results</h2>
     <hr />
-    {% if searchEmployee %}
       {% for employee in searchEmployee %}
       <div class="panel panel-default">
         <div class="panel-body">
-          <h3><a href="{{ url_for('profile', employee_name=employee['employeeName'] )}}">
-          <b>{{ employee['employeeName'] }}</b></a></h3>
-          <h4>{{ employee['company'] }}</h4>
+          <h3><a href="{{ url_for('profile', employee_name=employee[1] )}}">
+          <b>{{ employee[1] }}</b></a></h3>
+          <h4>{{ employee[9] }}</h4>
           <hr />
-          <h4><b>Description: {{ employee['position'] }}</b></h4>
+          <h4><b>Description: {{ employee[2] }}</b></h4>
         </div>
       </div>
       {% endfor %}
-    {% else %}
-      <h3> No results found. Try again? </h3>
-    {% endif %}
   </div>
+
+  {% else %}
+  <div class="col-md-12">
+    <h3>No results found. Try again? </h3>
+  </div>
+  {% endif %}
+
 </div>
 {% endblock %}

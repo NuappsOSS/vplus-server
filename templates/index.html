@@ -27,14 +27,16 @@
   </div>
   <div class="col-md-4 col-md-offset-4 text-center">
     <hr>
+    {% if featuredCompany %}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4>Featured firm:</h4>
       </div>
       <div class="panel-body">
-        <a href="company/{{ featuredCompany[0]['companyName'] }}"><img src="{{ featuredCompany[0]['imgUrl'] }}"></a>
+        <a href="company/{{ featuredCompany[0][1] }}"><img src="{{ featuredCompany[0][6] }}"></a>
       </div>
     </div>
+    {% endif %}
     <hr>
     <h5>Want your company added to this directory? Contact <a href="mailto:nuappsdevelopers8@gmail.com">
     nuappsdevelopers8@gmail.com</a> today!</h5>

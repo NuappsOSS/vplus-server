@@ -4,19 +4,19 @@
     <div class="col-md-offset-2 col-md-10">
       <h5><a href="{{ url_for('index')}}">Go back</a></h5>
       <br>
-        <h2>{{ employee[0]['employeeName'] }}</h2>
-        <h3><small>{{ employee[0]['position'] }} of {{ employee[0]['company'] }}</small></h3>
+        <h2>{{ employee[0][1] }}</h2>
+        <h3><small>{{ employee[0][2] }} of {{ employee[0][9] }}</small></h3>
         <br>
 
-        <p>{{ employee[0]['description'] }}</p>
+        <p>{{ employee[0][3] }}</p>
 
-        <i class="fa fa-map-marker"></i><a href="/company/{{ employee[0]['company'] }}"> {{ employee[0]['company'] }}</a>
+        <i class="fa fa-map-marker"></i><a href="/company/{{ employee[0][9] }}"> {{ employee[0][9] }}</a>
         <p>
-        <i class="fa fa-envelope"></i><a href="mailto:{{ employee[0]['email'] }}"> {{ employee[0]['email'] }}</a>
+        <i class="fa fa-envelope"></i><a href="mailto:{{ employee[0]['email'] }}"> {{ employee[0][4] }}</a>
         <br />
-        <i class="fa fa-address-card"></i><a href="{{ employee[0]['website'] }}"> {{ employee[0]['website'] }}</a>
+        <i class="fa fa-address-card"></i><a href="{{ employee[0]['website'] }}"> {{ employee[0][6] }}</a>
         <br />
-        <i class="fa fa-twitter"></i><a href="https://twitter.com/{{ employee[0]['twitter'] }}"> {{ employee[0]['twitter'] }}</a>
+        <i class="fa fa-twitter"></i><a href="https://twitter.com/{{ employee[0]['twitter'] }}"> {{ employee[0][5] }}</a>
         <br />
       </div>
     </div>
