@@ -1,4 +1,7 @@
-{% extends 'bootstrap/base.html' %}
+{% extends "material/base.html" %}
+{% import "material/utils.html" as util %}
+{% import "material/wtf.html" as wtf %}
+
 {% block html_attribs %} lang="en"{% endblock %}
 {% block metas %}
   {{ super() }}
@@ -10,36 +13,41 @@
 
 {% block styles %}
   {{ super() }}
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-    <!-- Font Awesome -->
-    <script src="https://use.fontawesome.com/4fec78782a.js"></script>
 {% endblock%}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
 
-    <div class="container-fluid">
+    <nav>
+      <ul id="slide-out" class="side-nav">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+        <li><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></li>
+      </ul>
+      <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+    </nav>
+
+    <div class="container">
         {% block content %}{% endblock %}
     </div>
 
-    <div class="navbar navbar-inverse navbar-fixed-bottom">
-      <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#footer-body">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-          <div class="navbar-collapse collapse" id="footer-body">
-            <ul class="nav navbar-nav">
-              <li><a href="{{ url_for('index') }}">Home</a></li>
-              <li><a href="{{ url_for('about') }}">About Us</a></li>
-              <li><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></li>
-            </ul>
-          </div>
-      </div>
-    </div>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <!-- Materialize CSS Javascript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <!-- Font Awesome -->
+    <script src="https://use.fontawesome.com/4fec78782a.js"></script>
+
+    <!-- Custom Javascript -->
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
 {% endblock %}

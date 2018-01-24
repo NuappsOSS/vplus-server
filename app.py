@@ -5,7 +5,7 @@ from flask_googlemaps import GoogleMaps
 from flask_qrcode import QRcode
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired #... and other necessary validators
-from flask_bootstrap import Bootstrap
+from flask_material import Material
 
 import os
 import urllib
@@ -25,11 +25,9 @@ app.secret_key = os.urandom(100)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['GOOGLEMAPS_KEY'] = "AIzaSyBddL64NmxF6-8GVRl4gUvJDCXFf0KmB0w"
 
-
 GoogleMaps(app)
 QRcode(app)
-Bootstrap(app)
-
+Material(app)
 
 def searchForCompany(company_query):
     search = []
@@ -41,8 +39,6 @@ def searchForCompany(company_query):
 
     return search
 
-
-# Combine into funtion that returns tuple
 def searchForEmployee(employee_query):
     search = []
     employees = db.reference('employees/').get(etag=False)
@@ -78,7 +74,6 @@ def get_coordinates(query):
 def page_not_found(e):
     return render_template('404.html'), 404
 
-
 @app.route('/index')
 def redirect_to_index():
     return redirect(url_for('index'))
@@ -91,7 +86,6 @@ def privacy_policy():
 # Main Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     featured = "Matchwear"
 
     featuredCompany = searchForCompany(featured)

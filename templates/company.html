@@ -7,47 +7,104 @@
     background-size: cover;
     opacity: rgba(0, 0, 0, 0.7);
   ">
-     <div class="container text-center">
+     <div class="container">
        {% if company[0][6] %}
-        <img class="img-circle" src="{{ company[0][6] }}" width="100px"/>
+        <img class="circle responsive-img" src="{{ company[0][6] }}" width="100px"/>
        {% endif %}
        <h1 class="big">{{ company[0][1] }}</h1>
        <p class="lead">{{ company[0][9] }}</p>
        <a href="{{ company[0][8] }}">
-         <i class="fa fa-address-card fa-2x"></i>
+         <i class="fa fa-custom fa-address-card fa-2x"></i>
        </a>
        <a href="https://twitter.com/{{ company[0][7] }}">
-         <i class="fa fa-twitter fa-2x"></i>
+         <i class="fa fa-custom fa-twitter fa-2x"></i>
        </a>
        <a href="{{ company[0][5] }}">
-         <i class="fa fa-facebook fa-2x"></i>
+         <i class="fa fa-custom fa-facebook fa-2x"></i>
        </a>
      </div>
    </header>
-    <div class="col-md-offset-2 col-md-5 company-body">
-      <h5><a href="{{ url_for('index')}}">Go back</a></h5>
-      <hr>
-      <h4><b>Industry:</b> {{ company[0][10] }}
-      </h4>
-      <h4><b>Description:</b> {{ company[0][3] }}
-      </h4>
-      <h4><b>Website</b> <a href="{{ company[0][8] }}">{{ company[0][8] }}</a></h4>
-    </div>
-    <div class="col-md-5">
-      <br><br><br><br>
-      <h4><b>Office:</b> {{ company[0][2] }}</h4>
-      {% set latitude, longitude =  company[0][2] | get_coordinates  %}
-      {% with map=googlemap_obj("another-map", latitude, longitude, markers=[(latitude, longitude)]) %}
-          {{map.html}}
-          {{map.js}}
-      {% endwith %}
+    <div class="col m12 company-body">
+      <p><a href="{{ url_for('index')}}">Go back</a></p><br>
 
-      {{ googlemap("company_map", latitude , longitude, market )}}
-    </div>
-    <div class="col-md-12 text-center">
-      <h4>Interested? Scan this company's QR code!</h4>
-      <img class="img-responsive" src="{{ qrcode(url) }}">
-      <br><br>
-    </div>
+      <div class="row">
+        <div class="col m4">
+          <div class="card">
+            <div class="card-stacked">
+              <div class="card-content">
+                <p>{{ company[0][10] }}</p>
+              </div>
+              <div class="card-action">
+                <h4>Industry</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col m5">
+          <div class="card">
+            <div class="card-stacked">
+              <div class="card-content">
+                <p>{{ company[0][3] }}</p>
+              </div>
+              <div class="card-action">
+                <h4>Description</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col m3">
+          <div class="card">
+            <div class="card-stacked">
+              <div class="card-action">
+                <h4><a href="{{ company[0][8] }}">Company website</a></h4>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-stacked">
+              <div class="card-content center-align">
+                <a href="{{ company[0][8] }}">
+                  <i class="fa fa-address-card fa-2x"></i>
+                </a>
+                <a href="https://twitter.com/{{ company[0][7] }}">
+                  <i class="fa fa-twitter fa-2x"></i>
+                </a>
+                <a href="{{ company[0][5] }}">
+                  <i class="fa fa-facebook fa-2x"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="col s6">
+          <div class="card horizontal">
+            <div class="card-stacked">
+              <div class="card-content">
+                {% set latitude, longitude =  company[0][2] | get_coordinates  %}
+                {% with map=googlemap_obj("another-map", latitude, longitude, markers=[(latitude, longitude)]) %}
+                    {{map.html}}
+                    {{map.js}}
+                {% endwith %}
+                {{ company[0][2] }}
+              </div>
+              <div class="card-action">
+                <h4>Office Address</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col s6">
+          <div class="card horizontal">
+            <div class="card-stacked">
+              <div class="card-content">
+                <img class="img-responsive" src="{{ qrcode(url) }}">
+              </div>
+              <div class="card-action">
+                <p>Interested? Scan this company's QR code!</p>
+              </div>
+            </div>
+          </div>
+        </div>
 </div>
 {% endblock %}

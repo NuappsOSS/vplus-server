@@ -15,11 +15,10 @@
           {% if business[6] %}
             <img src="{{ business[6]}}" class="img-circle" width="50px" />
           {% endif %}
-          <h3><a href="{{ url_for('company', company_name=business[1] )}}">
-          <b>{{ business[1] }}</b></a></h3>
-          <h4>{{ business[9] }}</h4>
-          <hr />
-          <h4><b>Description:</b> {{ business[3] }}</h4>
+          <h4><a href="{{ url_for('company', company_name=business[1] )}}">
+          <b>{{ business[1] }}</b></a></h4>
+          <h5>{{ business[9] }}</h5>
+          <p><b>Description:</b> {{ business[3] }}</p>
         </div>
       </div>
       {% endfor %}
