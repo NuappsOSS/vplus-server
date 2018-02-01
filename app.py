@@ -29,25 +29,25 @@ GoogleMaps(app)
 QRcode(app)
 Material(app)
 
-def searchForCompany(company_query):
+def searchQuery(query, reference):
     search = []
-    companies = db.reference('companies/').get(etag=False)
+    queries = db.reference(reference).get(etag=False)
 
-    for business in companies:
-        if business[1] == company_query:
-            search.append(business)
+    for result in queries:
+        if result[1] == query:
+            search.append(result)
 
     return search
 
-def searchForEmployee(employee_query):
-    search = []
-    employees = db.reference('employees/').get(etag=False)
+def employeeTranverse(companyName):
+    employees = []
+    search = db.reference("employees/").get(etag=False)
 
-    for employee in employees:
-        if employee[1] == employee_query:
-            search.append(employee)
+    for employee in search:
+        if employee[7] == companyName:
+            employees.append(employee)
 
-    return search
+    return employees
 
 googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
 
@@ -86,9 +86,9 @@ def privacy_policy():
 # Main Page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    featured = "Matchwear"
+    featured = "Nuapps"
 
-    featuredCompany = searchForCompany(featured)
+    featuredCompany = searchQuery(featured, "companies/")
 
     if request.method == "POST":
         return redirect(url_for("search", query=request.form["searchQuery"]))
@@ -107,8 +107,8 @@ def about():
 @app.route('/search/?q=<query>', methods=['GET', 'POST'])
 def search(query):
 
-    searchCompany = searchForCompany(query)
-    searchEmployee = searchForEmployee(query)
+    searchCompany = searchQuery(query, "companies/")
+    searchEmployee = searchQuery(query, "employees/")
 
     # Render template
     return render_template('search.html',
@@ -120,7 +120,7 @@ def search(query):
 # Profile route for employees
 @app.route('/profile/<employee_name>', methods=['GET'])
 def profile(employee_name):
-    search = searchForEmployee(employee_name)
+    search = searchQuery(employee_name, "employees/")
 
     if search is None:
         flask.abort(404)
@@ -132,7 +132,10 @@ def profile(employee_name):
 # Profile route for company
 @app.route('/company/<company_name>', methods=['GET'])
 def company(company_name):
-    search = searchForCompany(company_name)
+
+    search = searchQuery(company_name, "companies/")
+
+    employees = employeeTranverse(company_name)
 
     if search is None:
         flask.abort(404)
@@ -141,6 +144,7 @@ def company(company_name):
 
     return render_template('company.html',
                 title=company_name,
+                employees=employees,
                 url=url,
                 company=search)
 

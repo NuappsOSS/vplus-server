@@ -24,81 +24,72 @@
        </a>
      </div>
    </header>
-    <div class="col m12 company-body">
+ </div>
       <p><a href="{{ url_for('index')}}">Go back</a></p><br>
 
       <div class="row">
         <div class="col m4">
           <div class="card">
-            <div class="card-stacked">
-              <div class="card-content">
-                <p>{{ company[0][10] }}</p>
-              </div>
-              <div class="card-action">
-                <h4>Industry</h4>
-              </div>
+            <div class="card-content">
+              <p>{{ company[0][10] }}</p>
+            </div>
+            <div class="card-action">
+              <h4>Industry</h4>
             </div>
           </div>
         </div>
         <div class="col m5">
           <div class="card">
-            <div class="card-stacked">
-              <div class="card-content">
-                <p>{{ company[0][3] }}</p>
-              </div>
-              <div class="card-action">
-                <h4>Description</h4>
-              </div>
+            <div class="card-content">
+              <p>{{ company[0][3] }}</p>
+            </div>
+            <div class="card-action">
+              <h4>Description</h4>
             </div>
           </div>
         </div>
         <div class="col m3">
           <div class="card">
-            <div class="card-stacked">
-              <div class="card-action">
-                <h4><a href="{{ company[0][8] }}">Company website</a></h4>
-              </div>
+            <div class="card-action">
+              <h4 class="text-center"><a href="{{ company[0][8] }}">Company website</a></h4>
             </div>
           </div>
           <div class="card">
-            <div class="card-stacked">
-              <div class="card-content center-align">
-                <a href="{{ company[0][8] }}">
-                  <i class="fa fa-address-card fa-2x"></i>
-                </a>
-                <a href="https://twitter.com/{{ company[0][7] }}">
-                  <i class="fa fa-twitter fa-2x"></i>
-                </a>
-                <a href="{{ company[0][5] }}">
-                  <i class="fa fa-facebook fa-2x"></i>
-                </a>
-              </div>
+            <div class="card-content center-align">
+              <a href="{{ company[0][8] }}">
+                <i class="fa fa-address-card fa-2x"></i>
+              </a>
+              <a href="https://twitter.com/{{ company[0][7] }}">
+                <i class="fa fa-twitter fa-2x"></i>
+              </a>
+              <a href="{{ company[0][5] }}">
+                <i class="fa fa-facebook fa-2x"></i>
+              </a>
             </div>
           </div>
         </div>
       </div>
-        <div class="col s6">
+      <div class="row">
+        <div class="col m6">
           <div class="card horizontal">
-            <div class="card-stacked">
-              <div class="card-content">
-                {% set latitude, longitude =  company[0][2] | get_coordinates  %}
-                {% with map=googlemap_obj("another-map", latitude, longitude, markers=[(latitude, longitude)]) %}
-                    {{map.html}}
-                    {{map.js}}
-                {% endwith %}
-                {{ company[0][2] }}
-              </div>
-              <div class="card-action">
-                <h4>Office Address</h4>
-              </div>
+            <div class="card-content">
+              {% set lat, lng =  company[0][2] | get_coordinates  %}
+              {% with map=googlemap_obj("another-map", lat, lng, markers=[(lat, lng)]) %}
+                  {{map.html}}
+                  {{map.js}}
+              {% endwith %}
+              {{ company[0][2] }}
+            </div>
+            <div class="card-action">
+              <h4>Office Address</h4>
             </div>
           </div>
         </div>
-        <div class="col s6">
+        <div class="col m6">
           <div class="card horizontal">
             <div class="card-stacked">
               <div class="card-content">
-                <img class="img-responsive" src="{{ qrcode(url) }}">
+                <img class="responsive-img" src="{{ qrcode(url) }}">
               </div>
               <div class="card-action">
                 <p>Interested? Scan this company's QR code!</p>
@@ -106,5 +97,26 @@
             </div>
           </div>
         </div>
-</div>
+      </div>
+      <div class="row">
+        <div class="col m12">
+          <div class="card horizontal">
+            <div class="card-content">
+              <h4 class="center-align">Employees</h4>
+              <br>
+              {% for employee in employees %}
+              <div class="col s4">
+                <div class="card horizontal">
+                  <div class="card-content">
+                    <img class="responsive-img" src="https://avatars.io/static/default_128.jpg"/>
+                    <a href="{{ url_for('profile', employee_name = employee[1]) }}"><p><b>{{ employee[1] }}</b></p></a>
+                    <p>{{ employee[2]}}</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
 {% endblock %}
