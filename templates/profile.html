@@ -5,12 +5,12 @@
       <h5><a href="{{ url_for('index')}}">Go back</a></h5>
       <br>
         <h2>{{ employee[0][1] }}</h2>
-        <h3><small>{{ employee[0][2] }} of {{ employee[0][9] }}</small></h3>
+        <h3><small>{{ employee[0][2] }} of {{ employee[0][7] }}</small></h3>
         <br>
 
         <p>{{ employee[0][3] }}</p>
 
-        <i class="fa fa-map-marker"></i><a href="/company/{{ employee[0][9] }}"> {{ employee[0][9] }}</a>
+        <i class="fa fa-map-marker"></i><a href="/company/{{ employee[0][7] }}"> {{ employee[0][7] }}</a>
         <p>
         <i class="fa fa-envelope"></i><a href="mailto:{{ employee[0]['email'] }}"> {{ employee[0][4] }}</a>
         <br />
