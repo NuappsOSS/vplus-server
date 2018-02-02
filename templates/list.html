@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col m6 offset-m3">
+    <h2>Companies</h2>
+    <hr>
+    {% for company in companies %}
+    <div class="col s6 offset-s3">
+      <div class="card horizontal">
+        <div class="card-image">
+          <img src="{{ company[6] }}">
+        </div>
+        <div class="card-content center-align">
+          <p><a href="{{ url_for('company', company_name = company[1]) }}">
+            {{ company[1] }} </a></p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

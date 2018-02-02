@@ -49,6 +49,19 @@ def employeeTranverse(companyName):
 
     return employees
 
+
+def getCompanies():
+    companies = []
+    search = db.reference("companies/").get(etag=False)
+
+    searchIter = iter(search)
+    next(searchIter)
+
+    for company in searchIter:
+        companies.append(company)
+
+    return companies
+
 googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
 
 def get_coordinates(query):
@@ -101,6 +114,14 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html', title="About VEPlus")
+
+@app.route('/list')
+def listCompanies():
+    companies = getCompanies()
+    return render_template('list.html',
+                            title="Available Companies",
+                            companies=companies)
+
 
 
 # Search route for companies
