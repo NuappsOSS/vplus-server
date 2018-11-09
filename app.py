@@ -155,22 +155,18 @@ def profile(employee_name):
 def company(company_name):
 
     search = searchQuery(company_name, "companies/")
-
     employees = employeeTranverse(company_name)
 
     if search is None:
         flask.abort(404)
 
-    url = "http://vplus-server.herokuapp.com/company/" + company_name
+    url = request.url + company_name
 
     return render_template('company.html',
                 title=company_name,
                 employees=employees,
                 url=url,
                 company=search)
-
-
-app.jinja_env.filters['get_coordinates'] = get_coordinates
 
 
 if __name__ == '__main__':
