@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<!-- Image icon -->
+<div class="row">
+  <div class="col s12"  style="margin-top: 3rem" >
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Search -->
+    <form action="{{ url_for('main_page') }}" method="POST">
+      <input class="form-control" placeholder="Search for company or employee" name="searchQuery" type="text">
+    </form>
+
+    <br><br>
+
+    <p>Trending Companies:</p>
+    <div class="card">
+      <div class="card-content">
+        <div class="col s4"><a href="company/{{ featuredCompany[0][1] }}"><img width="60px" src="{{ featuredCompany[0][6] }}"></a></div>
+        <div class="col s8"><p>{{ featuredCompany[0][1] }}</p></div>
+      </div>
+    </div>
+ 
+    <br>
+ 
+    <p>Startups Seeking Investment:</p>
+    <div class="card">
+      <div class="card-content">
+        <div class="col s4"><a href="company/{{ featuredCompany[0][1] }}"><img width="60px" src="{{ featuredCompany[0][6] }}"></a></div>
+        <div class="col s8"><p>{{ featuredCompany[0][1] }}</p></div>
+      </div>
+    </div>  
+
+  </div>
+</div>
+{% endblock %}

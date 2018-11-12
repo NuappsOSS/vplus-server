@@ -6,6 +6,24 @@ header, main, footer {
     padding-left: 0; }
  }
 
+#background {
+  height: 100vh;
+  background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.4)
+        ),
+        url('../static/bg.jpg');
+  background-position: center center;
+  background-repeat:  no-repeat;
+  background-attachment: fixed;
+  background-size:  cover;
+}
+
+a#enter {
+    border: 1px solid white;
+}
+
 nav { background-color: #fff; }
 
 i.material-icons { color: #00bfa5; }

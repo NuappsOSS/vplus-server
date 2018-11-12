@@ -1,25 +1,25 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="row">
-    <div class="col m10 offset-m2">
-      <h5><a href="{{ url_for('index')}}">Go back</a></h5>
+  <div class="card">
+  <div class="card-content"> 
+    <div class="col s12">
       <br>
-        <h2>{{ employee[0][1] }}</h2>
-        <h3><small>{{ employee[0][2] }} of {{ employee[0][7] }}</small></h3>
-        <br>
+      <h2>{{ employee[0][1] }}</h2>
+      <h3><small>{{ employee[0][2] }} of {{ employee[0][7] }}</small></h3>
+      <br>
+      <p>{{ employee[0][3] }}</p>
 
-        <p>{{ employee[0][3] }}</p>
-
-        <i class="fa fa-map-marker"></i><a href="/company/{{ employee[0][7] }}"> {{ employee[0][7] }}</a>
-        <p>
-        <i class="fa fa-envelope"></i><a href="mailto:{{ employee[0]['email'] }}"> {{ employee[0][4] }}</a>
-        <br />
-        <i class="fa fa-address-card"></i><a href="{{ employee[0]['website'] }}"> {{ employee[0][6] }}</a>
-        <br />
-        <i class="fa fa-twitter"></i><a href="https://twitter.com/{{ employee[0]['twitter'] }}"> {{ employee[0][5] }}</a>
-        <br />
-      </div>
-    </div>
+      <i class="fa fa-map-marker"></i><a href="/company/{{ employee[0][7] }}"> {{ employee[0][7] }}</a>
+      <br>
+      <i class="fa fa-envelope"></i><a href="mailto:{{ employee[0]['email'] }}"> {{ employee[0][4] }}</a>
+      <br />
+      <i class="fa fa-address-card"></i><a href="{{ employee[0]['website'] }}"> {{ employee[0][6] }}</a>
+      <br />
+      <i class="fa fa-twitter"></i><a href="https://twitter.com/{{ employee[0]['twitter'] }}"> {{ employee[0][5] }}</a>
+      <br />
+     </div>
   </div>
-
+  </div>
+</div>
 {% endblock %}
